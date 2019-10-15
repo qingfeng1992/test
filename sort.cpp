@@ -53,13 +53,30 @@ void swap_sort(int arr[], int n)
 
 }
 
+void insertion_sort(int arr[], int n)
+{
+	for (int i = 1; i < n; i++)
+	{
+		int j = i - 1;
+		int tmp = arr[i];
+		while (j >= 0 && tmp < arr[j])
+		{
+			arr[j + 1] = arr[j];
+			j--;
+		}
+		arr[j + 1] = tmp;
+	}
+
+}
+
 int main(int argc, char** argv)
 {
 	int arr[] = {4, 9, 0, 1, 100, 89};
 	
 	int n  =  sizeof(arr) / sizeof(arr[0]);
 	//bubblesort(arr,n);
-	swap_sort(arr, n);
+	//swap_sort(arr, n);
+	insertion_sort(arr, n);
 
 	for (int i = 0; i < n ; i++)
 	{
