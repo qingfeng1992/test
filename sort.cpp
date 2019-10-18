@@ -56,7 +56,59 @@ void selected_sort(int arr[], int n)
 
 void bin_selected_sort(int arr[], int n)
 {
-	
+	for (int i = 0; i < n/2; i++)	
+	{
+		int maxIndex = n - 1 - i;
+		int minIndex = i;
+		int maxPos = maxIndex;
+		int minPos = minIndex;
+
+		for (int j = minIndex; j <= n - 1 -i; j++)
+		{
+			//从剩下的数据中找出最大和最小的元素
+			if (arr[j] < arr[minIndex])
+			{
+				minIndex = j;
+			}
+
+			if (arr[j] > arr[maxIndex])
+			{
+				maxIndex = j;
+			}
+		
+		}
+
+		//交换位置
+		if (maxIndex == minPos && minIndex == maxPos)
+		{
+			//直接交换两个的位置
+			int tmp = arr[minPos];
+			arr[minPos] = arr[maxPos];
+			arr[maxPos] = tmp;
+		}
+		else if (minPos == maxIndex && maxPos != minIndex)
+		{
+			//先交换最大值
+			int tmp = arr[maxPos];
+			arr[maxPos] = arr[maxIndex];
+			arr[maxIndex] = tmp;
+
+			tmp = arr[minPos];
+			arr[minPos] = arr[minIndex];
+			arr[minIndex] = tmp;
+		}
+		else //if (minPos != maxIndex && maxPos == minIndex)
+		{
+			//先交换最小值
+			int tmp = arr[minPos];
+			arr[minPos] = arr[minIndex];
+			arr[minIndex] = tmp;
+
+			tmp = arr[maxPos];
+			arr[maxPos] = arr[maxIndex];
+			arr[maxIndex] = tmp;
+		}
+	}
 
 }
 
@@ -125,7 +177,8 @@ int main(int argc, char** argv)
 	//bubblesort(arr,n);
 	//selected_sort(arr, n);
 	//insertion_sort(arr, n);
-	shell_sort(arr, n);
+	//shell_sort(arr, n);
+	bin_selected_sort(arr, n);
 
 	for (int i = 0; i < n ; i++)
 	{
