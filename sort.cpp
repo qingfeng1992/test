@@ -6,6 +6,7 @@
  ************************************************************************/
 
 #include<iostream>
+#include<vector>
 using namespace std;
 
 void bubblesort(int arr[], int n)
@@ -32,7 +33,7 @@ void bubblesort(int arr[], int n)
 
 }
 
-void swap_sort(int arr[], int n)
+void selected_sort(int arr[], int n)
 {
 	for (int i = 0; i < n - 1; i++)
 	{
@@ -53,6 +54,12 @@ void swap_sort(int arr[], int n)
 
 }
 
+void bin_selected_sort(int arr[], int n)
+{
+	
+
+}
+
 void insertion_sort(int arr[], int n)
 {
 	for (int i = 1; i < n; i++)
@@ -69,14 +76,56 @@ void insertion_sort(int arr[], int n)
 
 }
 
+//希尔排序
+void shell_sort(int arr[], int n)
+{
+	if (n < 2)
+	{
+		return;
+	}
+	//选择一个增量序列
+	vector<int> seq;
+
+	int nTmp = 2;
+	while ((n / nTmp) >= 1)
+	{
+		seq.push_back(n /nTmp);
+		nTmp *= 2; 
+	}
+
+	for (int i = 0; i < (int)seq.size(); i++)
+	{
+		int span = seq[i];//增量
+		for (int j = 0; j < span; j++)
+		{
+			for (int k = j + span; k < n; k += span) //标准元素从第二个开始
+			{
+				int stand = arr[k];//保存标准元素
+				int m = k - span;
+				while ( m >= 0 && stand < arr[m])
+				{
+					arr[m + span] = arr[m];//元素后移
+					m -= span;	
+				}
+				arr[m + span] = stand;//标准元素的位置
+			}
+			
+		}
+	
+	}
+
+
+}
+
 int main(int argc, char** argv)
 {
 	int arr[] = {4, 9, 0, 1, 100, 89};
 	
 	int n  =  sizeof(arr) / sizeof(arr[0]);
 	//bubblesort(arr,n);
-	//swap_sort(arr, n);
-	insertion_sort(arr, n);
+	//selected_sort(arr, n);
+	//insertion_sort(arr, n);
+	shell_sort(arr, n);
 
 	for (int i = 0; i < n ; i++)
 	{
