@@ -46,7 +46,12 @@ int main (int argc, char** argv)
 						chArr[3] = n4 + nAdd;
 					}
 					string str = chArr;
-					setStr.insert(str);
+					auto ret = setStr.insert(str);
+					//if (!ret.second)
+					//{
+					//	cout << "repeat: " << str << endl;
+					//}
+					//
 				}
 			
 			}
@@ -55,8 +60,14 @@ int main (int argc, char** argv)
 	
 	}
 
+	int n = 0;
 	for (auto it = setStr.begin(); it != setStr.end(); it++)
 	{
+		if (n < 100)
+		{
+		cout << *it << " ";
+		n++;
+		}
 		vtStr.push_back(*it);
 	}
 
