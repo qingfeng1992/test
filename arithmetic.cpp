@@ -51,15 +51,22 @@ int calculate(string strExpression)
 			//是操作数
 			strOperNum += ch;
 		}
-		else 
+			//判断是不是负号,1、表达式以-号开头 2、-号前面为左括号或者其他操作符
+		else if ('-' == ch && (i == 0 || (i > 0 && ('(' == strExpression[i-1] || '[' == strExpression[i-1] || '{' == strExpression[i-1] || '+' == strExpression[i-1] || '-' == strExpression[i-1] || '*' == strExpression[i-1] || '/' == strExpression[i-1]))))
 		{
+			//是负号，负号的优先级最高，直接入栈
+			st.push('@');
+		}
+		else
+		{
+
 			//是运算符
 			//先把前面的操作数输出
 			if (!strOperNum.empty())
 			{
 				infixExp.push_back(strOperNum);
 				strOperNum.clear();//清空缓存
-			}
+			}			
 
 			int x2 = GetPriority(ch);//当前字符优先级
 			while (true)
@@ -68,8 +75,9 @@ int calculate(string strExpression)
 				char stCh = st.top();
 				int x1 = GetPriority(stCh);
 
-				//当前字符优先级比栈顶元素优先级高，则入栈
-				if (x2 > x1)
+				//当前字符优先级比栈顶元素优先级高，则入栈 
+				//遇到左括号都先入栈
+				if (x2 > x1 || '(' == ch || '[' == ch || '{' == ch)
 				{
 					st.push(ch);
 					break;//跳出循环
@@ -97,6 +105,13 @@ int calculate(string strExpression)
 		}
 
 	}
+
+	//输出中缀表达式
+	for (auto &str : infixExp)
+	{
+		cout << str << " ";
+	}
+	cout << endl;
 
 	//计算中缀表达式的值
 	int nRet = 0;
@@ -148,6 +163,13 @@ int calculate(string strExpression)
 			//计算完成后入栈
 			stNum.push(result);
 		}
+		else if ("@" == str)
+		{
+			//负号只有一个操作数
+			int x = stNum.top();
+			stNum.pop();
+			stNum.push(-x);
+		}
 		else 
 		{
 			//操作数入栈
@@ -181,16 +203,6 @@ int main(int argc, char** argv)
 	priority.push_back(samePri);
 
 	samePri.clear();
-	samePri.push_back('+');//加减同一个优先级   
-	samePri.push_back('-');
-	priority.push_back(samePri);
-
-	samePri.clear();
-	samePri.push_back('*');//乘除同一个优先级   
-	samePri.push_back('/');
-	priority.push_back(samePri);
-
-	samePri.clear();
 	samePri.push_back('{');//左括号的优先级最高
 	priority.push_back(samePri);
 
@@ -202,6 +214,21 @@ int main(int argc, char** argv)
 	samePri.push_back('(');//左括号的优先级最高
 	priority.push_back(samePri);
 
+	samePri.clear();
+	samePri.push_back('+');//加减同一个优先级   
+	samePri.push_back('-');
+	priority.push_back(samePri);
+
+	samePri.clear();
+	samePri.push_back('*');//乘除同一个优先级   
+	samePri.push_back('/');
+	priority.push_back(samePri);
+
+	samePri.clear();
+	samePri.push_back('@');//用@符号表示负号，与减号区分
+	priority.push_back(samePri);
+
+	
 	string strIn;
 	while (cin >> strIn)
 	{
