@@ -27,5 +27,8 @@ int main(int argc, char** argv)
 	A *p = new B;
 	p->fun();
 
+	B b;
+	b.fun();
+
 	return 0;
 }

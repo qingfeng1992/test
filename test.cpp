@@ -76,15 +76,17 @@ void AddElement(vector<A> &v)
 
 int main()
 {
-	{
 	//set<A> s;
-	vector<A> v;
-	AddElement(v);
-	for (auto &item : v)
-	{
-		cout << item.i << " ";
-	}
-	}
-
+//	vector<A> v;
+//	AddElement(v);
+//	for (auto &item : v)
+//	{
+//		cout << item.i << " ";
+//	}
+//	}
+//
+int i = 0;
+i = +8+-5;
+cout << i << endl;
 	return 0;
 }

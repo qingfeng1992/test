@@ -54,6 +54,7 @@ void selected_sort(int arr[], int n)
 
 }
 
+//二元选择排序
 void bin_selected_sort(int arr[], int n)
 {
 	for (int i = 0; i < n/2; i++)	
@@ -112,6 +113,7 @@ void bin_selected_sort(int arr[], int n)
 
 }
 
+//插入排序
 void insertion_sort(int arr[], int n)
 {
 	for (int i = 1; i < n; i++)
@@ -128,7 +130,7 @@ void insertion_sort(int arr[], int n)
 
 }
 
-//希尔排序
+//希尔排序（缩小增量排序）
 void shell_sort(int arr[], int n)
 {
 	if (n < 2)
