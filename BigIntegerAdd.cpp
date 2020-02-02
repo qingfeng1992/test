@@ -122,6 +122,17 @@ string BigIntegerAdd(string strNum1, string strNum2)
 		}
 			
 	}
+	//去掉前面的0
+	if (!bZero)
+	{
+		while ('0' == strRet[0])
+		{
+			strRet.erase(0, 1);
+		}
+	}
+
+	if (bZero)
+		strRet = "0";
 
 	//拼接负号
 	if (bResultMinus && !bZero)
