@@ -1,0 +1,11 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+INFTIM	myserver.cpp	23;"	d	file:
+MAX_BUFFER_SIZE	myserver.cpp	24;"	d	file:
+OPEN_MAX	myserver.cpp	22;"	d	file:
+handle_term	myserver.cpp	/^static void handle_term(int sig)$/;"	f	file:
+main	myserver.cpp	/^int main(int argc, char *argv[])$/;"	f
