@@ -19,7 +19,7 @@ using namespace std;
 
 #define MAX_BUFFER 1024
 #define MAX_EVENT_NUMBER 1024
-#define LISTENT_PORT 8888
+#define LISTENT_PORT 8889
 
 int main(int argc, char** argv)
 {
@@ -30,6 +30,8 @@ int main(int argc, char** argv)
 	servaddr.sin_port = htons(LISTENT_PORT);
 	inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr.s_addr);
 
+	bool b = true;
+	setsockopt(fdListen, SOL_SOCKET, SO_REUSEADDR, &b, sizeof(bool));
 	socklen_t len;
 	if (bind (fdListen ,(sockaddr*)&servaddr, sizeof(sockaddr_in)) < 0)
 	{
@@ -71,41 +73,49 @@ int main(int argc, char** argv)
 		for (int i=0; i < nEvent; i++)
 		{
 
-			if (fdListen == events[i].data.fd)
+			if (fdListen == events[i].data.fd && events[i].events & EPOLLIN)
 			{
 				// 接收客户端连接
 				sockaddr_in clientaddr;
 				int fdClient = accept(fdListen, (sockaddr*)&clientaddr, &len);
 
-				if (fdClient != -1)
+				if (fdClient == -1)
 				{
 					cout << "accept error" << endl;
 					return 0;
 				}
 				cout << "有客户端连接:" << fdClient << endl;
-				event.events = EPOLLIN | EPOLLOUT | EPOLLERR;
+				//客户端连接的时候，不能一直设置EPOLLOUT,否则在LT模式下会一直触发的，cpu会空转
+				// 一般的做法是，在write返回EAGAIN / EWOULDBLOCK时，才会给该套接字设置EPOLLOUT，然后在下次触发EPOLLOUT 后重新write刚才失败的数据，write成功后就删除EPOLLOUT这个标志
+				event.events = EPOLLIN | EPOLLERR;
 				event.data.fd = fdClient;
                 epoll_ctl(fdepoll, EPOLL_CTL_ADD, fdClient, &event);				
 			}
 			else
 			{
 				int fd = events[i].data.fd;
-				if (events[i].events | EPOLLIN)
+				if (events[i].events & EPOLLIN)
 				{
 					int nRead = read(fd, recvbuff, MAX_BUFFER);
 					if (nRead == 0)
 					{
 						cout << "客户端:" << fd << "正常关闭" << endl;
+						epoll_ctl(fdepoll, EPOLL_CTL_DEL, fd, &events[i]);
 					}
 					else
 					{
 						write(fd, recvbuff, nRead);
 					}
 				}
-
-				if (events[i].events | EPOLLOUT)
+				else if (events[i].events & EPOLLOUT)
 				{
 					cout << "fd:" << fd << "can write." << endl;
+				}
+				else 
+				{
+					cout << "fd:" << fd << "error" << endl;
+					epoll_ctl(fdepoll, EPOLL_CTL_DEL, fd, &events[i]);
+
 				}
 
 			}
